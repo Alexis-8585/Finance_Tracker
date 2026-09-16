@@ -17,5 +17,6 @@ def hello_world():
     return "<p>Hello, World!</p>"
 
 #Execute following code if this file is main
-if __name__ == '__main__':
-    db_init
+# if __name__ == '__main__':
+#     print("hi")
+#     db_init()
