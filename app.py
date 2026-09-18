@@ -25,10 +25,20 @@ def db_init():
 def index():
     return render_template('index.html')
 
-@app.route("/submit", method=['POST'])
+@app.route("/submit", methods=['POST'])
 def login():
     username = request.form.get('username')
-    return 
+    #check if username and password are in the database 
+    #if yes add user id to session
+    #if no add them to the database and create id 
+    #maybe redirect to dashbord
+    #make dashboard.html
+    return '<html>hi</html>'
+
+@app.route('/dashboard', methods=['GET'])
+def dashboard():
+    if 'user_id' not in session:
+        return #error / not in session
 
 
 #Execute following code if this file is main
