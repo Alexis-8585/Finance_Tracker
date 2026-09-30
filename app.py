@@ -2,16 +2,12 @@ import sqlite3
 import os # Used for keeping environment variable secret
 from flask import Flask, render_template, request, session, redirect
 
+import database
+
 
 ### Setup Vars###
 app = Flask(__name__) #This is for Flask to know the app
 app.secret_key = os.getenv('FLASK_SECRET_KEY')
-
-
-### Functions ###
-def get_db_cursor():
-    con = sqlite3.connect("testDatabase.db")
-    return con.cursor()
 
 def db_init():
     con = sqlite3.connect("testDatabase.db") #get connection
@@ -20,20 +16,26 @@ def db_init():
     con.close()
 
 
+
 ### Routes ###
-@app.route("/")
+@app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route("/submit", methods=['POST'])
+
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    username = request.form.get('username')
-    #check if username and password are in the database 
-    #if yes add user id to session
-    #if no add them to the database and create id 
-    #maybe redirect to dashbord
-    #make dashboard.html
-    return '<html>hi</html>'
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        print(username)
+        print(password)
+        #check if username and password are in the database 
+        #if yes add user id to session
+        #if no add them to the database and create id 
+        #maybe redirect to dashbord
+        #make dashboard.html
+    return render_template('login.html')
 
 @app.route('/dashboard', methods=['GET'])
 def dashboard():
