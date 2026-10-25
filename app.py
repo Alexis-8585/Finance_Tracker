@@ -1,49 +1,47 @@
-import sqlite3
-import os # Used for keeping environment variable secret
-from flask import Flask, render_template, request, session, redirect
+from fastapi import FastAPI, Request, Form
+from fastapi.responses import RedirectResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+from pydantic import BaseModel
 
-import database
+
+import os # Used for keeping environment variable secret
+
 
 
 ### Setup Vars###
-app = Flask(__name__) #This is for Flask to know the app
-app.secret_key = os.getenv('FLASK_SECRET_KEY')
+app = FastAPI()
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
 
-def db_init():
-    con = sqlite3.connect("testDatabase.db") #get connection
-    with open("schema.sql","r") as file: # opens the template for the database table
-        con.executescript(file.read()) # creates the table
-    con.close()
+### Models ###
+class User(BaseModel):
+    username: str
+    password: str
 
+first = User(username="test", password="test123")
 
 
 ### Routes ###
-@app.route('/')
-def index():
-    return render_template('index.html')
+@app.get('/')
+def index(request: Request):
+    return templates.TemplateResponse(request, 'index.html', {'title': 'Home'})
 
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
-        print(username)
-        print(password)
-        #check if username and password are in the database 
-        #if yes add user id to session
-        #if no add them to the database and create id 
-        #maybe redirect to dashbord
-        #make dashboard.html
-    return render_template('login.html')
-
-@app.route('/dashboard', methods=['GET'])
-def dashboard():
-    if 'user_id' not in session:
-        return #error / not in session
+@app.get("/login")
+def login_page(request: Request):
+    return templates.TemplateResponse(request, "login.html")
 
 
-#Execute following code if this file is main
-if __name__ == '__main__':
-     db_init()
-     app.run(debug=True)
+@app.post("/login")
+def login(request: Request, username: str = Form(...), password: str = Form(...)):
+    # login logic goes here later
+    if username == first.username and password == first.password:
+        return RedirectResponse("/dashboard", status_code=303)
+    else:
+        return templates.TemplateResponse(request, "login.html", {"error": "Invalid username or password"})
+
+    
+@app.get("/dashboard")
+def dashboard(request: Request):
+    return templates.TemplateResponse(request, "dashboard.html")

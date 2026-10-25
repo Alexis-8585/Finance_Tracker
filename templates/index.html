@@ -1,14 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-
-</head>
-<body>
-    <div>
-        <h1> This is a start</h1>
-        <a href="{{ url_for('login') }}">Login</a>
-    </div>
-</body>
-
-
-</html>
+{% extends "base.html" %}
+{% block content %}
+    <h1>Welcome to the Finance Tracker</h1>
+    <p>This is the home page.</p>
+    <button onclick="window.location.href='/login'">Login</button>
+{% endblock %}
+{% block scripts %}
+    <script>
+        // Add any JavaScript code here if needed
+    </script>
+{% endblock %}
