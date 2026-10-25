@@ -1,8 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
-    <h1>Welcome to the Finance Tracker</h1>
-    <p>This is the home page.</p>
-    <button onclick="window.location.href='/login'">Login</button>
+    <div class="container">
+        <h1>Welcome to the Finance Tracker</h1>
+        <p>This is the home page.</p>
+        <button onclick="window.location.href='/login'">Login</button>
+        <button onclick="window.location.href='/register'">Sign Up</button>
+    </div>
 {% endblock %}
 {% block scripts %}
     <script>
