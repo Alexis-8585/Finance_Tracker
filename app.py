@@ -10,6 +10,7 @@ from argon2.exceptions import VerifyMismatchError
 import os # Used for keeping environment variable secret
 
 import database  # Import the database module
+import plaid_functions  # Import the plaid module
 
 
 ### Setup Vars###
@@ -44,9 +45,12 @@ def register_page(request: Request):
     return templates.TemplateResponse(request, "login.html", {"title": "Register", "signin": "register"})
 
     
-@app.get("/dashboard")
+@app.get("/dashboard")#TODO add authentication to this route so that only logged in users can access it
 def dashboard(request: Request):
-    return templates.TemplateResponse(request, "dashboard.html", {"title": "Dashboard"})
+    public_token = plaid_functions.plaid_sandbox_request_public_token()
+    access_token = plaid_functions.plaid_exchange_public_token(public_token)
+    accounts = plaid_functions.plaid_get_accounts(access_token)
+    return templates.TemplateResponse(request, "dashboard.html", {"title": "Dashboard", "accounts": accounts})
 
 
 #### POST ROUTES ###

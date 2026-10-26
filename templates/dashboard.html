@@ -4,5 +4,14 @@
         <h1>Welcome to the Finance Tracker</h1>
         <p>This is the dashboard page.</p>
         <button onclick="window.location.href='/'">Home</button>
+        <h2>Accounts</h2>
+        <ul>
+            {% for account in accounts %}
+                <li>
+                    {{ account.name }} - {{ account.type }}<br>
+                    Balance: ${{ "%.2f"|format(account.balances.current) }}
+                </li>
+            {% endfor %}
+        </ul>
     </div>
 {% endblock %}
